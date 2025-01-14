@@ -1,0 +1,17 @@
+{
+    "name": "youtube-clone",
+    "version": "1.0.0",
+    "description": "Youtube Clone",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/syang0624/youtube-clone.git"
+    },
+    "scripts": {
+        "start": "node index.js"
+    },
+    "author": "Steven Yang",
+    "license": "MIT",
+    "dependencies": {
+        "express": "^4.21.2"
+    }
+}
