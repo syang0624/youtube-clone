@@ -7,12 +7,13 @@
         "url": "git+https://github.com/syang0624/youtube-clone.git"
     },
     "scripts": {
-        "dev": "nodemon --exec babel-node src/index.js"
+        "dev": "nodemon --exec babel-node src/server.js"
     },
     "author": "Steven Yang",
     "license": "MIT",
     "dependencies": {
-        "express": "^4.21.2"
+        "express": "^4.21.2",
+        "morgan": "^1.10.0"
     },
     "devDependencies": {
         "@babel/core": "^7.26.0",
