@@ -7,20 +7,37 @@ export const home = async (req, res) => {
 export const watch = async (req, res) => {
     const { id } = req.params;
     const video = await Video.findById(id);
-    console.log(video);
+    if (!video) {
+        return res.render("404", { pageTitle: "Video Not Found" });
+    }
     return res.render("watch", { pageTitle: video.title, video: video });
 };
 
-export const getEdit = (req, res) => {
+export const getEdit = async (req, res) => {
     const { id } = req.params;
-
-    return res.render("edit", { pageTitle: `Editing: ` });
+    const video = await Video.findById(id);
+    if (!video) {
+        return res.render("404", { pageTitle: "Video Not Found" });
+    }
+    return res.render("edit", {
+        pageTitle: `Edit ${video.title}`,
+        video: video,
+    });
 };
 
-export const postEdit = (req, res) => {
+export const postEdit = async (req, res) => {
     const { id } = req.params;
-    const { title } = req.body;
-    res.redirect(`/videos/${id}`);
+    const { title, description, hashtags } = req.body;
+    const video = await Video.exists({ _id: id });
+    if (!video) {
+        return res.render("404", { pageTitle: "Video Not Found" });
+    }
+    await Video.findByIdAndUpdate(id, {
+        title: title,
+        description: description,
+        hashtags: Video.formatHashtags(hashtags),
+    });
+    return res.redirect(`/videos/${id}`);
 };
 
 export const getUpload = (req, res) => {
@@ -33,7 +50,7 @@ export const postUpload = async (req, res) => {
         await Video.create({
             title: title,
             description: description,
-            hashtags: hashtags.split(",").map((word) => `#${word}`),
+            hashtags: Video.formatHashtags(hashtags),
         });
     } catch (error) {
         return res.render("upload", {
@@ -41,5 +58,11 @@ export const postUpload = async (req, res) => {
             errorMessage: error._message,
         });
     }
+    return res.redirect("/");
+};
+
+export const deleteVideo = async (req, res) => {
+    const { id } = req.params;
+    await Video.findByIdAndDelete(id);
     return res.redirect("/");
 };
