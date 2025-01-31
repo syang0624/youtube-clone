@@ -65,13 +65,59 @@ export const postLogin = async (req, res) => {
 export const startGithubLogin = (req, res) => {
     const baseURL = "https://github.com/login/oauth/authorize";
     const config = {
-        client_id: "Ov23liy5rkRxA9pWozlW",
+        client_id: process.env.GH_CLIENT,
         allow_signup: false,
         scope: "read:user user:email",
     };
-    const params = new URLSearchParams(config);
+    const params = new URLSearchParams(config).toString();
     const finalURL = `${baseURL}?${params}`;
     return res.redirect(finalURL);
+};
+export const finishGithubLogin = async (req, res) => {
+    const baseURL = "https://github.com/login/oauth/access_token";
+    const config = {
+        client_id: process.env.GH_CLIENT,
+        client_secret: process.env.GH_SECRET,
+        code: req.query.code,
+    };
+    const params = new URLSearchParams(config).toString();
+    const finalURL = `${baseURL}?${params}`;
+    const tokenRequest = await (
+        await fetch(finalURL, {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+            },
+        })
+    ).json();
+
+    if ("access_token" in tokenRequest) {
+        const { access_token } = tokenRequest;
+        const apiURL = "https://api.github.com";
+        const userData = await (
+            await fetch(`${apiURL}/user`, {
+                headers: {
+                    Authorization: `token ${access_token}`,
+                },
+            })
+        ).json();
+        console.log(userData);
+        const emailData = await (
+            await fetch(`${apiURL}/user/emails`, {
+                headers: {
+                    Authorization: `token ${access_token}`,
+                },
+            })
+        ).json();
+        const email = emailData.find(
+            (email) => email.primary === true && email.verified === true
+        );
+        if (!email) {
+            return res.redirect("/login");
+        }
+    } else {
+        res.redirect("/login");
+    }
 };
 
 export const edit = (req, res) => res.send("Edit User");
