@@ -3,7 +3,8 @@ include mixins/video
 
 
 block content
-    each data in videos
-        +video(data)
-    else
-        li Sorry Nothing found.
+    div.video-grid
+        each data in videos
+            +video(data)
+        else
+            span.empty__message No videos found.
