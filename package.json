@@ -18,9 +18,8 @@
     "homepage": "https://github.com/syang0624/youtube-clone#README",
     "dependencies": {
         "@aws-sdk/client-s3": "^3.577.0",
-        "@ffmpeg/core": "^0.12.6",
-        "@ffmpeg/ffmpeg": "^0.12.10",
-        "@ffmpeg/util": "^0.12.1",
+        "@ffmpeg/core": "^0.8.5",
+        "@ffmpeg/ffmpeg": "^0.9.7",
         "bcrypt": "^5.1.1",
         "connect-mongo": "^5.1.0",
         "dotenv": "^16.4.5",
@@ -32,8 +31,7 @@
         "multer": "^1.4.2",
         "multer-s3": "^3.0.1",
         "node-fetch": "^3.3.2",
-        "pug": "^3.0.2",
-        "regenerator-runtime": "^0.14.1"
+        "pug": "^3.0.2"
     },
     "devDependencies": {
         "@babel/cli": "^7.24.5",

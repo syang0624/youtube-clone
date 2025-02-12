@@ -29,6 +29,7 @@ const handleDownload = async () => {
     const ffmpeg = createFFmpeg({
         log: true,
     });
+
     await ffmpeg.load();
     ffmpeg.FS("writeFile", files.input, await fetchFile(videoFile));
     await ffmpeg.run("-i", files.input, "-r", "60", files.output);
