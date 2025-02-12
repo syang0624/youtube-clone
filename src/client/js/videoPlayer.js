@@ -51,7 +51,10 @@ const handleVolumeChange = (event) => {
 };
 
 const formatTime = (seconds) => {
-    return new Date(seconds * 1000).toISOString().substring(14, 19);
+    if (isNaN(seconds) || seconds < 0) {
+        return "00:00"; // Return a default time string if invalid
+    }
+    return new Date(seconds * 1000).toISOString().slice(14, 19);
 };
 
 const handleLoadedMetaData = () => {
